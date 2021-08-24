@@ -1,0 +1,19 @@
+---
+
+# share configs
+cifs_connections:
+  - name: webshop
+    user: shareuser
+    pass: changeme
+    mountpoint: '/share'
+    domain: myshare.com
+    share: 'O:\\some\weird\windows\share'
+
+# local
+cifs_credsfile_path: '/root'
+cifs_credsfile_mode: '0600'
+cifs_credsfile_owner: root
+cifs_mount_root_path: '/mnt'
+cifs_dir_mode: '0777'
+cifs_file_mode: '0777'
+cifs_persist_config: false

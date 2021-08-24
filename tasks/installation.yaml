@@ -1,0 +1,6 @@
+---
+
+- name: install all components for a working cifs mount
+  package:
+    name: '{{ cifs_packages }}'
+    state: present

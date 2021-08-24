@@ -1,0 +1,23 @@
+---
+
+- name: push samba credentials for each configured connection
+  template:
+    src: smbcredentials.j2
+    dest: '{{ cifs_credsfile_path }}/.smbcredentials_{{ item.name }}'
+    owner: '{{ cifs_credsfile_owner }}'
+    mode: '{{ cifs_credsfile_mode }}'
+  vars:
+    cifs_user: '{{ item.user }}'
+    cifs_pass: '{{ item.pass }}'
+    cifs_domain: '{{ item.domain | upper }}'
+  loop: '{{ cifs_connections }}'
+
+- name: mount shared drive and persist configuration to fstab
+  mount:
+    fstype: cifs
+    state: mounted
+    path: '{{ cifs_mount_root_path }}/{{ item.name }}'
+    opts: 'credentials={{ cifs_credsfile_path }}/.smbcredentials_{{ item.name }},file_mode={{ cifs_file_mode }},dir_mode={{ cifs_dir_mode }}'
+    src: '{{ item.share }}'
+  loop: '{{ cifs_connections }}'
+  when: cifs_persist_config == true
